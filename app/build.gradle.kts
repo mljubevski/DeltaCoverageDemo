@@ -1,3 +1,5 @@
+import io.github.surpsg.deltacoverage.CoverageEngine
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -8,12 +10,12 @@ plugins {
 
 android {
     namespace = "com.example.deltacoveragedemo"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.deltacoveragedemo"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -38,10 +40,6 @@ android {
     }
 }
 
-kover {
-    
-}
-
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -58,4 +56,18 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+kover {
+    
+}
+
+deltaCoverageReport {
+    coverage {
+        engine = CoverageEngine.INTELLIJ
+    }
+    
+    diffSource {
+        git.compareWith("refs/remotes/origin/master")
+    }
 }

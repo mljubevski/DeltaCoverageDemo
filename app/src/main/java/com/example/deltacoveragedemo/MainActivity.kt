@@ -12,10 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.deltacoveragedemo.ui.theme.DeltaCoverageDemoTheme
+import com.example.deltacoveragedemo.util.SomeUtil
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        SomeUtil.printSomething()
+        
         enableEdgeToEdge()
         setContent {
             DeltaCoverageDemoTheme {
