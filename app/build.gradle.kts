@@ -8,11 +8,17 @@ plugins {
     alias(libs.plugins.kover)
     alias(libs.plugins.delta.coverage)
 }
-apply(from = "$rootDir/sourcesets.gradle")
 
 android {
     namespace = "com.example.deltacoveragedemo"
     compileSdk = 35
+
+    sourceSets {
+        named("main") {
+            java.srcDirs("src/java")
+            resources.srcDir("src/resources")
+        }
+    }
 
     defaultConfig {
         applicationId = "com.example.deltacoveragedemo"
