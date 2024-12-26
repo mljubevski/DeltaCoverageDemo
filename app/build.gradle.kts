@@ -1,5 +1,4 @@
 import io.github.surpsg.deltacoverage.CoverageEngine
-import org.gradle.kotlin.dsl.resolver.buildSrcSourceRootsFilePath
 
 plugins {
     alias(libs.plugins.android.application)
@@ -15,8 +14,16 @@ android {
 
     sourceSets {
         getByName("main") {
-            java.srcDirs("src/java")
-            resources.srcDir("src/resources")
+            java.srcDirs("src/main/java")
+            resources.srcDirs("src/main/resources")
+        }
+        getByName("test") {
+            java.srcDirs("src/test/java")
+            resources.srcDirs("src/test/resources")
+        }
+        getByName("androidTest") {
+            java.srcDirs("src/androidTest/java")
+            resources.srcDirs("src/androidTest/resources")
         }
     }
 
@@ -37,11 +44,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
