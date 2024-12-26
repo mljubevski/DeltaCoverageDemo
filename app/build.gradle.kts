@@ -1,5 +1,5 @@
 import io.github.surpsg.deltacoverage.CoverageEngine
-import org.gradle.kotlin.dsl.resolver.buildSrcSourceRootsFilePath
+
 
 plugins {
     alias(libs.plugins.android.application)
@@ -40,6 +40,33 @@ android {
     buildFeatures {
         compose = true
     }
+
+    configure<io.github.surpsg.deltacoverage.gradle.DeltaCoverageConfiguration> {
+        coverage { engine = CoverageEngine.INTELLIJ }
+        classesDirs = files("${layout.buildDirectory}/tmp/kotlin-classes/debug")
+        diffSource { git.compareWith("refs/remotes/origin/master") }
+
+        view("boban") {
+            matchClasses.value(listOf("app/src/main/java/**/*.kt"))
+            coverageBinaryFiles = files(
+                "${buildDir}/kover/bin-reports/testDebugUnitTest.ic",
+                "$${buildDir}/kover/bin-reports/testReleaseUnitTest.ic"
+            )
+        }
+        reportViews {
+            val boban by getting {
+                coverageBinaryFiles = files(
+                    "${buildDir}/kover/bin-reports/testDebugUnitTest.ic",
+                    "$${buildDir}/kover/bin-reports/testReleaseUnitTest.ic"
+                )
+                classesDirs = files("${buildDir}/tmp/kotlin-classes/debug")
+//                violationRules {
+//                    // ...
+//                }
+            }
+
+        }
+    }
 }
 
 dependencies {
@@ -61,31 +88,5 @@ dependencies {
 }
 
 kover {
-    
-}
 
-configure<io.github.surpsg.deltacoverage.gradle.DeltaCoverageConfiguration> {
-    coverage {
-        engine = CoverageEngine.INTELLIJ
-    }
-    
-    classesDirs = files("${layout.buildDirectory}/tmp/kotlin-classes/debug")
-
-
-    diffSource {
-        git.compareWith("refs/remotes/origin/master")
-    }
-    
-    reportViews {
-        view("view") {
-            coverageBinaryFiles = files(
-                "$projectDir/app/build/kover/bin-reports/testDebugUnitTest.ic",
-                "$projectDir/app/build/kover/bin-reports/testReleaseUnitTest.ic"
-            )
-
-            matchClasses.value(
-                listOf("app/src/main/java/**/*.kt")
-            )
-        }
-    }
 }
