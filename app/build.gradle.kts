@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kover)
     alias(libs.plugins.delta.coverage)
 }
+apply(from = "$rootDir/sourcesets.gradle")
 
 android {
     namespace = "com.example.deltacoveragedemo"
