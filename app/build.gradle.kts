@@ -1,4 +1,5 @@
 import io.github.surpsg.deltacoverage.CoverageEngine
+import org.gradle.kotlin.dsl.resolver.buildSrcSourceRootsFilePath
 
 plugins {
     alias(libs.plugins.android.application)
@@ -62,12 +63,28 @@ kover {
     
 }
 
-deltaCoverageReport {
+configure<io.github.surpsg.deltacoverage.gradle.DeltaCoverageConfiguration> {
     coverage {
         engine = CoverageEngine.INTELLIJ
     }
     
+    classesDirs = files("$projectDir/src/main/java")
+
+
     diffSource {
         git.compareWith("refs/remotes/origin/master")
+    }
+    
+    reportViews {
+        view("view") {
+            coverageBinaryFiles = files(
+                "$projectDir/app/build/kover/bin-reports/testDebugUnitTest.ic",
+                "$projectDir/app/build/kover/bin-reports/testReleaseUnitTest.ic"
+            )
+
+            matchClasses.value(
+                listOf("app/src/main/java/**/*.kt")
+            )
+        }
     }
 }
