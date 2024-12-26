@@ -1,5 +1,6 @@
 import io.github.surpsg.deltacoverage.CoverageEngine
 
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +8,7 @@ plugins {
     alias(libs.plugins.kover)
     alias(libs.plugins.delta.coverage)
 }
+apply(from = "$rootDir/sourcesets.gradle")
 
 android {
     namespace = "com.example.deltacoveragedemo"
@@ -14,16 +16,8 @@ android {
 
     sourceSets {
         getByName("main") {
-            java.srcDirs("src/main/java")
-            resources.srcDirs("src/main/resources")
-        }
-        getByName("test") {
-            java.srcDirs("src/test/java")
-            resources.srcDirs("src/test/resources")
-        }
-        getByName("androidTest") {
-            java.srcDirs("src/androidTest/java")
-            resources.srcDirs("src/androidTest/resources")
+            java.srcDirs("src/java")
+            resources.srcDir("src/resources")
         }
     }
 
@@ -44,14 +38,41 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
+    }
+
+    configure<io.github.surpsg.deltacoverage.gradle.DeltaCoverageConfiguration> {
+        coverage { engine = CoverageEngine.INTELLIJ }
+        classesDirs = files("${layout.buildDirectory}/tmp/kotlin-classes/debug")
+        diffSource { git.compareWith("refs/remotes/origin/master") }
+
+        view("boban") {
+            matchClasses.value(listOf("app/src/main/java/**/*.kt"))
+            coverageBinaryFiles = files(
+                "${buildDir}/kover/bin-reports/testDebugUnitTest.ic",
+                "${buildDir}/kover/bin-reports/testReleaseUnitTest.ic"
+            )
+        }
+        reportViews {
+            val boban by getting {
+                coverageBinaryFiles = files(
+                    "${buildDir}/kover/bin-reports/testDebugUnitTest.ic",
+                    "${buildDir}/kover/bin-reports/testReleaseUnitTest.ic"
+                )
+                classesDirs = files("${buildDir}/tmp/kotlin-classes/debug")
+//                violationRules {
+//                    // ...
+//                }
+            }
+
+        }
     }
 }
 
@@ -74,31 +95,5 @@ dependencies {
 }
 
 kover {
-    
-}
 
-configure<io.github.surpsg.deltacoverage.gradle.DeltaCoverageConfiguration> {
-    coverage {
-        engine = CoverageEngine.INTELLIJ
-    }
-    
-    classesDirs = files("${layout.buildDirectory}/tmp/kotlin-classes/debug")
-
-
-    diffSource {
-        git.compareWith("refs/remotes/origin/master")
-    }
-    
-    reportViews {
-        view("view") {
-            coverageBinaryFiles = files(
-                "$projectDir/app/build/kover/bin-reports/testDebugUnitTest.ic",
-                "$projectDir/app/build/kover/bin-reports/testReleaseUnitTest.ic"
-            )
-
-            matchClasses.value(
-                listOf("app/src/main/java/**/*.kt")
-            )
-        }
-    }
 }
