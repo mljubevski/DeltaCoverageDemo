@@ -14,7 +14,7 @@ android {
     compileSdk = 35
 
     sourceSets {
-        named("main") {
+        getByName("main") {
             java.srcDirs("src/java")
             resources.srcDir("src/resources")
         }
