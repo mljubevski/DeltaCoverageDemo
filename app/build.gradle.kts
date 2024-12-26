@@ -69,7 +69,7 @@ configure<io.github.surpsg.deltacoverage.gradle.DeltaCoverageConfiguration> {
         engine = CoverageEngine.INTELLIJ
     }
     
-    classesDirs = files("$projectDir/src/main/java")
+    classesDirs = files("${layout.buildDirectory}/tmp/kotlin-classes/debug")
 
 
     diffSource {
