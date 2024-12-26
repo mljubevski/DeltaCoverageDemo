@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.kover)
     alias(libs.plugins.delta.coverage)
 }
-apply(from = "$rootDir/sourcesets.gradle")
 
 android {
     namespace = "com.example.deltacoveragedemo"
@@ -53,7 +52,7 @@ android {
         classesDirs = files("${layout.buildDirectory}/tmp/kotlin-classes/debug")
         diffSource { git.compareWith("refs/remotes/origin/master") }
 
-        view("boban") {
+        view("random") {
             matchClasses.value(listOf("app/src/main/java/**/*.kt"))
             coverageBinaryFiles = files(
                 "${buildDir}/kover/bin-reports/testDebugUnitTest.ic",
@@ -61,7 +60,7 @@ android {
             )
         }
         reportViews {
-            val boban by getting {
+            val random by getting {
                 coverageBinaryFiles = files(
                     "${buildDir}/kover/bin-reports/testDebugUnitTest.ic",
                     "${buildDir}/kover/bin-reports/testReleaseUnitTest.ic"
