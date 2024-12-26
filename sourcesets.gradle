@@ -1,0 +1,6 @@
+sourceSets {
+    main {
+        java { srcDirs = ["src/java"] }
+        resources { srcDir "src/resources" }
+    }
+}
