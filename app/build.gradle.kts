@@ -8,13 +8,14 @@ plugins {
     alias(libs.plugins.kover)
     alias(libs.plugins.delta.coverage)
 }
+apply(from = "$rootDir/sourcesets.gradle")
 
 android {
     namespace = "com.example.deltacoveragedemo"
     compileSdk = 35
 
     sourceSets {
-        named("main") {
+        getByName("main") {
             java.srcDirs("src/java")
             resources.srcDir("src/resources")
         }
@@ -56,14 +57,14 @@ android {
             matchClasses.value(listOf("app/src/main/java/**/*.kt"))
             coverageBinaryFiles = files(
                 "${buildDir}/kover/bin-reports/testDebugUnitTest.ic",
-                "$${buildDir}/kover/bin-reports/testReleaseUnitTest.ic"
+                "${buildDir}/kover/bin-reports/testReleaseUnitTest.ic"
             )
         }
         reportViews {
             val boban by getting {
                 coverageBinaryFiles = files(
                     "${buildDir}/kover/bin-reports/testDebugUnitTest.ic",
-                    "$${buildDir}/kover/bin-reports/testReleaseUnitTest.ic"
+                    "${buildDir}/kover/bin-reports/testReleaseUnitTest.ic"
                 )
                 classesDirs = files("${buildDir}/tmp/kotlin-classes/debug")
 //                violationRules {
